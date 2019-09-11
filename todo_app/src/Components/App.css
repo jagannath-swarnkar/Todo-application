@@ -1,8 +1,7 @@
-body{
-  margin:0;
-  padding: 0;
-}
 
+body{
+  background: azure;  
+}
 
 .stats{
   display: flex;
@@ -34,7 +33,7 @@ input {
   padding-top: 20px;
   font-size: 30px;
 }
-
+*
   button{
     position: absolute;
     background-color:  rgb(116, 243, 243);
@@ -47,9 +46,11 @@ input {
   background-color: rgb(226, 157, 157);
 }
 li{
-  background-color: rgb(221, 224, 179);
+  background-color: mistyrose;
   padding: 10px;
   margin: 4px; 
-  font-size: 30px; 
+  font-size: 30px;
+  border-radius: 8px; 
 
 }
+
