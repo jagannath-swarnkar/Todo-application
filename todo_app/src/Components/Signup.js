@@ -19,7 +19,7 @@ export class Signup extends Component {
     onSubmitHandler = (e) =>{
         e.preventDefault();
         axios
-        .post('/signup',(this.state))        
+        .post('http://localhost:8080/signup',(this.state))        
         .then((result)=>{
             if(result.data!=='err'){swal("Signup successful!", "Please signin !","success")}
             else{swal("Signup failed!", "User email already exists, Please signin !","error")};

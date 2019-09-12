@@ -2,14 +2,13 @@
   "name": "todo_app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://jagannath-swarnkar.github.io/React_Practice_Projects/",
+
   "dependencies": {
     "@material-ui/core": "^4.4.0",
     "@material-ui/icons": "^4.2.1",
     "axios": "^0.19.0",
     "express": "^4.17.1",
     "fs": "0.0.1-security",
-    "gh-pages": "^2.1.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "0.9.5",
@@ -23,8 +22,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+	"production":"npm run build && serve -s build"
   },
   "proxy": "http://localhost:8080"
 }

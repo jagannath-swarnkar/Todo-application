@@ -25,7 +25,7 @@ export default class App extends Component{
     UNSAFE_componentWillMount(){     
         this.setState({jwt:this.props.jwt},()=>{
         axios
-        .get('/get',{params:{token:this.state.jwt}})
+        .get('http://localhost:8080/get',{params:{token:this.state.jwt}})
         .then(result=>{console.log('get method',result.data);
             
                 this.setState({
@@ -61,7 +61,7 @@ export default class App extends Component{
                     item:''
                 },()=>{
                     axios
-                    .post('/post',{token:this.state.jwt,data:this.state.itemList[this.state.itemList.length-1]})
+                    .post('http://localhost:8080/post',{token:this.state.jwt,data:this.state.itemList[this.state.itemList.length-1]})
                     .then((data) => {
                         itemList[itemList.length-1]['id']=data.data[data.data.length-1].id;
                         itemList[itemList.length-1]['userId']=data.data[data.data.length-1].userId;
@@ -77,7 +77,7 @@ export default class App extends Component{
                     if(itemList[i].id===parseInt(this.state.editId,10)){                     
                         itemList[i].text=this.state.editItem;
                         axios
-                        .put("/put/"+i, {token:this.state.jwt,text:this.state.editItem,id:itemList[i].id})
+                        .put("http://localhost:8080/put/"+i, {token:this.state.jwt,text:this.state.editItem,id:itemList[i].id})
                         .then(()=>{console.log();})
                         .catch((err)=>{console.log( 'err in put',err);})
                     }
@@ -99,7 +99,7 @@ export default class App extends Component{
             dict.done = true;
             this.setState({ itemList })            
             axios
-            .put('/done/'+dict.id,{done:true,text:dict.text,token:this.state.jwt,id:dict.id})
+            .put('http://localhost:8080/done/'+dict.id,{done:true,text:dict.text,token:this.state.jwt,id:dict.id})
             .then(()=>{console.log('done updated to true')
             })
             .catch((err)=>{console.log('err in done updating',err)
@@ -109,7 +109,7 @@ export default class App extends Component{
             this.setState({ itemList })
             
             axios
-            .put('/done/'+dict.id,{done:false,text:dict.text,token:this.state.jwt,id:dict.id})
+            .put('http://localhost:8080/done/'+dict.id,{done:false,text:dict.text,token:this.state.jwt,id:dict.id})
             .then(()=>{console.log('done updated to false')
             })
             .catch((err)=>{console.log('err in done updating',err)
@@ -141,10 +141,10 @@ export default class App extends Component{
         this.setState({editItem:e.target.value})
     }
     deleteHandler=(e)=>{
-        var listIns = this.state.itemList;
+        // var listIns = this.state.itemList;
         var dict = _.findWhere(this.state.itemList,{id:e})
         axios
-        .post('/delete/'+e,{id:e,token:this.state.jwt,userId:dict.userId})
+        .post('http://localhost:8080/delete/'+e,{id:e,token:this.state.jwt,userId:dict.userId})
         .then((result)=>{
             this.setState({itemList:result.data})
         })

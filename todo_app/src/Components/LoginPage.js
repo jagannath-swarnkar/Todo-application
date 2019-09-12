@@ -25,7 +25,7 @@ export class LoginPage extends Component {
     onSubmitHandler=(e)=>{
         e.preventDefault();
         axios
-        .post('/login',(this.state))
+        .post('http://localhost:8080/login',(this.state))
         .then((data)=> {
             console.log('data checking',data.data);
             
