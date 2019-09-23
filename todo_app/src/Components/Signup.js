@@ -38,6 +38,9 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  googleSignup: {
+    width:'auto',
+  },
 }));
 
 export default function SignUp() {
@@ -67,7 +70,7 @@ export default function SignUp() {
   }
 
     const onSubmitHandler = (e) =>{
-        // e.preventDefault();
+        e.preventDefault();
         axios
         .post('http://localhost:8080/signup',({'name':name,'email':email,'password1':password}))        
         .then((result)=>{
@@ -176,7 +179,9 @@ export default function SignUp() {
       </div>
       <GoogleLogin
             clientId="619545785746-aeldlso5o53jo6ovnhm88uo9nsh6pgls.apps.googleusercontent.com"
-            buttonText="Signup"
+            buttonText="Signup with Google"
+            fullWidth
+            className={classes.googleSignup}
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
             // cookiePolicy={'single_host_origin'}

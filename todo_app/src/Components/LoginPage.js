@@ -39,6 +39,10 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  login: {
+    width:'auto',
+    marginTop:'5px',
+  },
 }));
 
 export default function SignIn() {
@@ -182,7 +186,8 @@ export default function SignIn() {
           </Grid>
           <GoogleLogin
             clientId="619545785746-aeldlso5o53jo6ovnhm88uo9nsh6pgls.apps.googleusercontent.com"
-            buttonText="Login"
+            buttonText="Login with Google"
+            className={classes.login}
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
             // cookiePolicy={'single_host_origin'}
