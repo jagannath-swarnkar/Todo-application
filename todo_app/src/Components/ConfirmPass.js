@@ -63,9 +63,10 @@ export class ConfirmPass extends Component {
         console.log(token)
         if(this.state.password===this.state.confirmPassword){
             axios
-            .post('/newPassword',{'newPassword':this.state.password,'token':token})
+            .post('http://localhost:8080/newPassword',{'newPassword':this.state.password,'token':token})
             .then((result)=>{
-                console.log('new password sent to backend',result.data)
+                swal('Password changed successfully','Please go back to login page','success')
+                this.setState({password:'',confirmPassword:''})
             })
             .catch((err)=>{console.log('err in sending new password to backned ',err)})
         }else{
@@ -101,6 +102,7 @@ export class ConfirmPass extends Component {
                                     id="password"
                                     label="New Password"
                                     name="password"
+                                    type="password"
                                     autoFocus
                                     value={this.state.password}
                                     onChange={this.passwordChange}
@@ -113,7 +115,7 @@ export class ConfirmPass extends Component {
                                     id="confirmPassword"
                                     label="Confirm Password"
                                     name="confirmPassword"
-                                    
+                                    type="password"
                                     value={this.state.confirmPassword}
                                     onChange={this.confirmPasswordChange}
                                 />

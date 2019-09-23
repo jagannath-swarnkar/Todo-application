@@ -51,8 +51,12 @@ export default function SignUp() {
     axios
     .post('http://localhost:8080/signup',({'name':name,'email':email}))        
     .then((result)=>{
-        if(result.data!=='err'){swal("Signup successful!", "Please signin !","success")}
-        else{swal("Signup failed!", "User email already exists, Please signin !","error")};
+        if(result.data!=='err'){swal("Signup successful!", "Please signin !","success");
+        console.log('signup successfull!')
+          }
+        else{swal("Signup failed!", "User email already exists, Please signin !","error");
+          console.log('user exists!')
+          };
     })
     .catch((err)=>{console.log('err in posting signup data'.err)})
   }
@@ -67,8 +71,12 @@ export default function SignUp() {
         axios
         .post('http://localhost:8080/signup',({'name':name,'email':email,'password1':password}))        
         .then((result)=>{
-            if(result.data!=='err'){swal("Signup successful!", "Please signin !","success")}
-            else{swal("Signup failed!", "User email already exists, Please signin !","error")};
+            if(result.data!=='err'){swal("Signup successful!", "Please signin !","success");
+            console.log('signup successfull!')
+              }
+            else{swal("Signup failed!", "User email already exists, Please signin !","error");
+            console.log('user exists!')
+              };
             setName('')
             setLastName('')
             setEmail('')

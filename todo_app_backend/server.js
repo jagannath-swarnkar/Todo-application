@@ -193,7 +193,7 @@ app.post('/nodemailer',(req,res)=>{
     knex('userdetail')
     .where('userdetail.email',req.body.email)
     .then((data)=>{
-        console.log(data[0])
+        console.log(data)
         jwt.sign({data:JSON.stringify(data[0].email)},process.env.SECRET,{expiresIn:'5m'}, (err, token)=>{
             data[0].forget=token
 
@@ -284,6 +284,10 @@ app.post('/nodemailer',(req,res)=>{
             })
         })
     })
+    .catch((err)=>{
+        console.log('user email does not exists');
+        res.send('noUser')
+    })
 })
 
 // // Creating endpoint to verify the confirmation token in email
@@ -297,12 +301,15 @@ app.post('/verifyToken',(req,res)=>{
 
 // // Creating endpoint to update new Password to database
 app.post('/newPassword',checkToken,(req,res)=>{
+    console.log('new password',req.body,req.token)
     jwt.verify(req.token,process.env.SECRET,(err,authData)=>{
-        if(!err){
+        if(!err){console.log('token verified',JSON.parse(authData.data))
             knex('userdetail')
             .where('userdetail.email',JSON.parse(authData.data))
             .update({password:req.body.newPassword})
-            .then((data)=>{console.log('new password updated :',data)})
+            .then((data)=>{console.log('new password updated :',data)
+                res.send('data')
+                })
             .catch((err)=>{console.log('err in updatng new password : ',err)})
         }else{
             console.log('err in verifying token',err)
