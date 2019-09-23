@@ -1,104 +1,178 @@
-import React, { Component } from 'react';
-import './Signup.css';
+import React from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
+import GoogleLogin from 'react-google-login';
 
-export class Signup extends Component {
-    constructor(props) {
-        super(props);
-    
-        this.state = {
-             name:'',
-             email:'',
-             password1:'',
-             password2:''
-        }
-    }
+import {Link} from 'react-router-dom';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 
 
-    onSubmitHandler = (e) =>{
-        e.preventDefault();
+const useStyles = makeStyles(theme => ({
+  '@global': {
+    body: {
+      backgroundColor: theme.palette.common.white,
+    },
+  },
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', 
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
+
+export default function SignUp() {
+  const classes = useStyles();
+  const [name, setName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const googleLoginHandler = (email,name) =>{
+    axios
+    .post('http://localhost:8080/signup',({'name':name,'email':email}))        
+    .then((result)=>{
+        if(result.data!=='err'){swal("Signup successful!", "Please signin !","success")}
+        else{swal("Signup failed!", "User email already exists, Please signin !","error")};
+    })
+    .catch((err)=>{console.log('err in posting signup data'.err)})
+  }
+  
+  const responseGoogle = (response) => {
+    var userDetail=(response.profileObj);
+    googleLoginHandler(userDetail.email,userDetail.name)
+  }
+
+    const onSubmitHandler = (e) =>{
+        // e.preventDefault();
         axios
-        .post('http://localhost:8080/signup',(this.state))        
+        .post('http://localhost:8080/signup',({'name':name,'email':email,'password1':password}))        
         .then((result)=>{
             if(result.data!=='err'){swal("Signup successful!", "Please signin !","success")}
             else{swal("Signup failed!", "User email already exists, Please signin !","error")};
-            this.props.login()
-            this.setState({name:'',email:'',password1:'',password2:''})
+            setName('')
+            setLastName('')
+            setEmail('')
+            setPassword('')
         })
-        
         .catch((err)=>{console.log('err in posting signup data'.err)})
-        
     }
-    nameChange = (e) =>{
-        this.setState({name:e.target.value})
-    }
-    emailChange = (e) =>{
-        this.setState({email:e.target.value})
-    }
-    password1Change = (e) =>{
-        this.setState({password1:e.target.value})
-    }
-    password2Change = (e) =>{
-        this.setState({password2:e.target.value})
-    }
-    
-    render() {
-        return (
-            <div className="body">
-    <div className="form">
-    <ul className="tab-group">
-    	<li className="tab active"><a href="#signup">Sign Up</a></li>
-        <li className="tab"><a onClick={this.props.login}> Log In</a></li>
-    </ul>
-      
-    <div className="tab-content">
-        <div id="signup">   
-          <h1>Sign Up for Free</h1>
-          
-	        <form onSubmit={this.onSubmitHandler}>
-	          
-		        <div className="top-row">
-		            <div className="field-wrap">
-		              <label>
-		                Full Name<span className="req">*</span>
-		              </label>
-		              <input onChange={this.nameChange} value={this.state.name} className="box-size bl" type="text" autoComplete="off" required name="name" placeholder=" Your name" autoFocus/>
-		            </div>
-		        </div>
 
-	         	<div className="field-wrap">
-		            <label>
-		              Email Address<span className="req">*</span>
-		            </label>
-	            	<input onChange={this.emailChange} value={this.state.email} className="box-size bl" type="email" required autoComplete="off" name="email" placeholder=" abc@gmail.com"/>
-	          	</div>
-	          
-	          	<div className="field-wrap">
-		            <label>
-		              Set A Password<span className="req">*</span>
-		            </label>
-		            <input onChange={this.password1Change} value={this.state.password1} className="box-size bl" type="password" required autoComplete="off" name="password" placeholder=" Password"/>
-	          	</div>
-	          	
-	          	<div className="field-wrap">
-		            <label>
-		              Confirm Password<span className="req">*</span>
-		            </label>
-		            <input onChange={this.password2Change} value={this.state.password2} className="box-size bl" type="password" required autoComplete="off" name="password2" placeholder=" Confirm Password"/>
-	          	</div>
-	          
-            <button className="button button-block"> Get Started </button>
-	          
-	        </form>
-
-        </div>   
-    </div> 
-      
-</div> 
-            </div>
-        )
-    }
+  return (
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign up
+        </Typography>
+        <form className={classes.form} onSubmit={onSubmitHandler}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="fname"
+                name="firstName"
+                variant="outlined"
+                required
+                fullWidth
+                id="firstName"  
+                label="First Name"
+                // autoFocus
+                value={name}
+                onChange={(e) => setName(e.target.value )}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                name="lastName"
+                autoComplete="lname"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value )}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                type="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value )}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value )}
+              />
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            
+          >
+            Sign Up
+          </Button>
+          <Grid container justify="flex-end">
+            <Grid item>
+                {/* <routLink to='/login'> */}
+              <Link to="/login" 
+                style={{color:'blue'}}>
+                Already have an account? Sign in
+              </Link>
+              {/* </routLink> */}
+            </Grid>
+          </Grid>
+        </form>
+      </div>
+      <GoogleLogin
+            clientId="619545785746-aeldlso5o53jo6ovnhm88uo9nsh6pgls.apps.googleusercontent.com"
+            buttonText="Login"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            // cookiePolicy={'single_host_origin'}
+          />
+    </Container>
+  );
 }
-
-export default Signup;

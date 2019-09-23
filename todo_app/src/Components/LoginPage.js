@@ -1,86 +1,194 @@
-import React, { Component } from 'react';
-import './LoginPage.css';
+import React from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
+import {reactLocalStorage} from 'reactjs-localstorage';
+import GoogleLogin from 'react-google-login';
 
-export class LoginPage extends Component {
-    constructor(props) {
-        super(props)
-    
-        this.state = {
-             email:'',
-             password:''
-        }
-    }
-    onChangeEmail=(e)=>{        
-        this.setState({
-            email:e.target.value
-        })
-    }
-    onChangePass=(e)=>{
-        this.setState({
-            password:e.target.value
-        })
-    }
-    onSubmitHandler=(e)=>{
-        e.preventDefault();
-        axios
-        .post('http://localhost:8080/login',(this.state))
-        .then((data)=> {
-            console.log('data checking',data.data);
-            
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import {Redirect, Link} from 'react-router-dom';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+
+
+const useStyles = makeStyles(theme => ({
+  '@global': {
+    body: {
+      backgroundColor: theme.palette.common.white,
+    },
+  },
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
+
+export default function SignIn() {
+  const classes = useStyles();
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [redirect, setRedirect] = React.useState(false);
+
+  const googleLoginHandler = (email) =>{
+    // e.preventDefault();
+    axios
+        .post('http://localhost:8080/login',({'email':email}))
+        .then((data)=> {            
             if(data.data==="wrongPass"){
-                this.setState({password:''},()=>{swal("Wrong Password!", "Please enter a valid password!","error");})
-                // document.getElementById('pass').focus();
+                setPassword('');
+                swal("Wrong Password!", "Please enter a valid password!","error");
                 }    
             else if(data.data==='err'){
-                this.setState({email:'',password:''},()=>{swal("Login failed!", "User detail does not exists, Please signup first!","error");})
+                setEmail('')
+                setPassword('')
+                swal("Login failed!", "User detail does not exists, Please signup first!","error");
                 }
             else{
-                // this.props.login()
-                console.log("data send successfuly");console.log(data.data)
-                this.props.jwtHandler(data.data.toString())
-                this.setState({email:'',password:''},()=>{swal("Login successful!", "...Please press enter for the next!");})
-                }
-            
+                reactLocalStorage.set('token', data.data.toString());
+                setEmail('')
+                setPassword('')
+                setRedirect(true)
+            }
             })
         .catch((err)=>{
-            this.setState({email:'',password:''},()=>{swal("Login failed! ", "User detail does not exists, Please signup first!","error");})
-        }
-        )
+            setEmail('')
+            setPassword('')
+            swal("Login failed! ", "User detail does not exists, Please signup first!","error");
+        })
+    }
+    const responseGoogle = (response) => {
+      // console.log(response.tokenObj);
+      // console.log(response.tokenObj.id_token);
+      var userDetail=(response.profileObj.email);
+      googleLoginHandler(userDetail)
     }
 
-    render() {
-        return (
-            <div className="body">
-                <div className="form" id="login">   
-                    <h1>Welcome Back!</h1>
-                    
-                        <form onSubmit={this.onSubmitHandler}>
-                            <div className="field-wrap">
-                                <label>
-                                    Email Address<span className="req">*</span>
-                                </label>
-                                <input autoFocus className="box-size bl" onChange={this.onChangeEmail} value={this.state.email} type="email" required autoComplete="off" name="email" placeholder=" abc@gmail.com"/>
-                            </div>
-
-                            <div className="field-wrap">
-                                <label>
-                                Password<span className="req">*</span>
-                                </label>
-                                <input id="pass" className="box-size bl" onChange={this.onChangePass} value={this.state.password} type="password" required autoComplete="off" name="Password" placeholder=" abc@123$ABC"/>
-                            </div>
-                                <p><a onClick={this.props.signup}>Signup</a></p><br/>
-                                    {/* <p><a href="#">Forgot Password?</a></p>  */}
-                                <button onClick={this.props.login} id="login" className="button button-block">Log In</button>
-                        
-                        
-                        </form>
-
-                    </div>
-            </div>
-        )
+  const onSubmitHandler = (e) =>{
+    e.preventDefault();
+    axios
+        .post('http://localhost:8080/login',({'email':email,'password':password}))
+        .then((data)=> {            
+            if(data.data==="wrongPass"){
+                setPassword('');
+                swal("Wrong Password!", "Please enter a valid password!","error");
+                }    
+            else if(data.data==='err'){
+                setEmail('')
+                setPassword('')
+                swal("Login failed!", "User detail does not exists, Please signup first!","error");
+                }
+            else{
+                reactLocalStorage.set('token', data.data.toString());
+                setEmail('')
+                setPassword('')
+                setRedirect(true)
+            }
+            })
+        .catch((err)=>{
+            setEmail('')
+            setPassword('')
+            swal("Login failed! ", "User detail does not exists, Please signup first!","error");
+        })
     }
+    if(redirect){
+        return(<Redirect to={'/home'} />);
+    }
+    if(reactLocalStorage.get('token')){
+        return(<Redirect to={'/home'} />);
+    }
+  return (
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <form className={classes.form} onSubmit={onSubmitHandler}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            value={email}
+            onChange={(e) => setEmail(e.target.value )}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            // autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value )}
+          />
+          {/* <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+          /> */}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link to='/forget' 
+                style={{color:'blue'}}
+                variant="body2">
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link to='/signup' 
+                style={{color:'blue'}}
+                variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
+          <GoogleLogin
+            clientId="619545785746-aeldlso5o53jo6ovnhm88uo9nsh6pgls.apps.googleusercontent.com"
+            buttonText="Login"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            // cookiePolicy={'single_host_origin'}
+          />
+        </form>
+      </div>
+    </Container>
+  );
 }
-
-export default LoginPage
