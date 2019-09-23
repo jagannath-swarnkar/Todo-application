@@ -1,5 +1,5 @@
 # Todo-application(React & nodejs)
-## This is Backend of todo application in nodejs
+### This is Backend of todo application in nodejs
 
 run command `npm install` to get all the packages <br/>
 and run command `node server.js` to run backend  <br/>
@@ -28,3 +28,11 @@ DB_NAME=todoBackend  // your database name <br/>
 </code><br/>
 
 Table will create automatically by backend code
+
+
+
+### Todo-app Frontend( React js)
+
+first you need to run command `npm install` to get all the packages
+then run `npm start` to run the app, it will open in your default browser automaticaly
+within frontend you also need to run backend aside to make the app work properly
