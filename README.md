@@ -15,17 +15,15 @@ and for mysql connection in backend code, create a file in this directory name `
 `nano .env`  // to edit `.env` file  <br/>
 write :<br/>
 <code>
-SECRET = secreteKey  // for JWT 
-  </code><br/>
+SECRET = secreteKey  </code> // for JWT  <br/>
   <code>
-DB_HOST=localhost    // for hostname in database  </code><br/>
+DB_HOST=localhost  </code>// for hostname in database <br/>
     <code>
-DB_USER=username     // your mysql username like root  </code><br/>
+DB_USER=username   </code>   // your mysql username like root <br/>
       <code>
-DB_PASS=password     // your mysql password  </code><br/>
+DB_PASS=password    </code>  // your mysql password <br/>
         <code>
-DB_NAME=todoBackend  // your database name <br/>
-</code><br/>
+DB_NAME=todoBackend  </code>  // your database name <br/>
 
 Table will create automatically by backend code
 
