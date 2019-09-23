@@ -18,7 +18,8 @@ export class ConfirmPass extends Component {
         this.state = {
              password:'',
              confirmPassword:'',
-             token:true
+             token:true,
+             isLogin:false
         }
     }
     UNSAFE_componentWillMount(){
@@ -66,7 +67,7 @@ export class ConfirmPass extends Component {
             .post('http://localhost:8080/newPassword',{'newPassword':this.state.password,'token':token})
             .then((result)=>{
                 swal('Password changed successfully','Please go back to login page','success')
-                this.setState({password:'',confirmPassword:''})
+                this.setState({password:'',confirmPassword:'',isLogin:true})
             })
             .catch((err)=>{console.log('err in sending new password to backned ',err)})
         }else{
@@ -78,9 +79,10 @@ export class ConfirmPass extends Component {
     
     render() {
         if(!this.state.token){
-            return(
-                <Redirect to={'/forget'} />
-            )
+            return(<Redirect to={'/forget'} />)
+        }
+        if(this.state.isLogin){
+            return(<Redirect to={'/login'} />)
         }
         return (
             <React.Fragment>
