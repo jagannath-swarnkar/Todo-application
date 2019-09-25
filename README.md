@@ -1,5 +1,5 @@
 # Todo-application(React & nodejs)
-This App has hosted on AWS server and you can get this app on http://react-todo.cf
+This App has hosted on AWS and you can get this app on http://react-todo.cf
 
 ### This is Backend of todo application in nodejs
 
