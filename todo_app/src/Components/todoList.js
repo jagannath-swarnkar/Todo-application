@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -9,24 +8,8 @@ import Input from '@material-ui/core/Input';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import IconButton from '@material-ui/core/IconButton';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-
-const useStyles = makeStyles(theme => ({
-    root: {
-      width: '100%',
-      display:"flex",
-      flexDirection:"column",
-    },
-    Input:{
-      width:"100%",
-    },
-    IconButton:{
-      alignItems:"flex-end",
-    },
-    h1:{color:'red',},
-  }));
   
   export default function todoList(props) {
-    const classes = useStyles();
     const listState = props.defaultList;
     const todos = props.itemList.filter((it) => {
         if ( listState === 'pending' ) {            
@@ -39,7 +22,11 @@ const useStyles = makeStyles(theme => ({
     })
 
     return (
-        <List className={classes.root}>
+        <List style={{
+                width: '100%',
+                display:"flex",
+                flexDirection:"column"
+                }}>
           {todos.map((value,index) => {
               if(value.id===props.todoId){
                 return (
@@ -49,7 +36,8 @@ const useStyles = makeStyles(theme => ({
                                 onClick={props.checkbox} 
                                 id={value.id} />
                     </ListItemIcon>
-                    <Input value={props.todo} 
+                    <Input style={{width:"100%"}}
+                            value={props.todo} 
                             onChange={props.editChangeHandler} 
                             error 
                             onKeyPress={props.addItem} 
@@ -74,7 +62,8 @@ const useStyles = makeStyles(theme => ({
                         primary={`${value.text}`} />
                     </div>
                     <ListItemSecondaryAction>
-                      <IconButton edge="end" 
+                      <IconButton style={{alignItems:"flex-end"}}
+                        edge="end" 
                         aria-label="comments"  
                         id={value.id} 
                         onClick={()=>{props.deleteHandler(value.id)}}>
