@@ -15,8 +15,7 @@
     "nodemailer": "^6.3.0",
     "nodemon": "^1.19.1",
     "query-string": "^6.8.3",
-    "react-router": "^5.0.1",
-    "sqlite3": "^4.1.0"
+    "react-router": "^5.0.1"
   },
   "devDependencies": {},
   "scripts": {
